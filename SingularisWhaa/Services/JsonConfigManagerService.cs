@@ -9,6 +9,7 @@ using SingularisWhaa.Services.Abstractions;
 
 namespace SingularisWhaa.Services;
 
+/// <inheritdoc/>
 public class JsonConfigManagerService : IConfigManagerService
 {
     private readonly ILogger<JsonConfigManagerService> logger;
@@ -24,6 +25,7 @@ public class JsonConfigManagerService : IConfigManagerService
         }
     };
 
+    /// <inheritdoc/>
     public string RootPath { get; }
 
     public const string EnvName = "App_ConfigPath";
@@ -46,6 +48,7 @@ public class JsonConfigManagerService : IConfigManagerService
         }
     }
 
+    /// <inheritdoc/>
     public ICategoryConfig GetConfig(string category)
     {
         if (configCache.TryGetValue(category, out DocumentConfig? ret))

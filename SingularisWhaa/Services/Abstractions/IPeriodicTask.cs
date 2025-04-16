@@ -1,7 +1,14 @@
-﻿namespace SingularisWhaa.Services.Abstractions
+﻿namespace SingularisWhaa.Services.Abstractions;
+
+/// <summary>
+/// Интерфейс определяющий преодичную задачу.
+/// </summary>
+public interface IPeriodicTask
 {
-    public interface IPeriodicTask
-    {
-        public Task DoTask(CancellationToken cancellationToken);
-    }
+    /// <summary>
+    /// Выполняет задачу🕊️.
+    /// </summary>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> общей задачи.</param>
+    /// <returns><see cref="Task"/> отображающая задачу по выполнению задачи🔥🔥🔥.</returns>
+    Task DoTask(CancellationToken cancellationToken);
 }

@@ -1,65 +1,60 @@
-﻿
+﻿using SingularisWhaa.Services.Abstractions;
 
-using Cronos;
+namespace SingularisWhaa.Services;
 
-using SingularisWhaa.Services.Abstractions;
-
-namespace SingularisWhaa.Services
+public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T : IPeriodicTask
 {
-    public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T : IPeriodicTask
+    private readonly ILogger<CronPeriodicTaskService<T>> logger;
+    private readonly IServiceProvider serviceProvider;
+    private readonly ICronParserService cronParserService;
+    private readonly string cronExpression;
+
+    private string ConfigName => $"CronTask_{typeof(T).Name}";
+
+    public CronPeriodicTaskService(ILogger<CronPeriodicTaskService<T>> logger, IServiceProvider serviceProvider, IConfigManagerService configManager, ICronParserService cronParserService)
     {
-        private readonly ILogger<CronPeriodicTaskService<T>> logger;
-        private readonly IServiceProvider serviceProvider;
-        private readonly ICronParserService cronParserService;
-        private readonly string cronExpression;
+        this.logger = logger;
+        this.serviceProvider = serviceProvider;
+        this.cronParserService = cronParserService;
 
-        private string ConfigName => $"CronTask_{typeof(T).Name}";
+        var config = configManager.GetConfig(ConfigName);
 
-        public CronPeriodicTaskService(ILogger<CronPeriodicTaskService<T>> logger, IServiceProvider serviceProvider, IConfigManagerService configManager, ICronParserService cronParserService)
+        if (!config.TryGet("CronExpression", out string? parsedExpression))
         {
-            this.logger = logger;
-            this.serviceProvider = serviceProvider;
-            this.cronParserService = cronParserService;
-
-            var config = configManager.GetConfig(ConfigName);
-
-            if (!config.TryGet("CronExpression", out string? parsedExpression))
-            {
-                logger.LogWarning("Cron выражение (Поле 'CronExpression') в конфиге '{configname}' не задано, значение по умолчанию - раз в день.", ConfigName);
-                parsedExpression = "0 0 * * *";
-            }
-
-            cronExpression = parsedExpression;
+            logger.LogWarning("Cron выражение (Поле 'CronExpression') в конфиге '{configname}' не задано, значение по умолчанию - раз в день.", ConfigName);
+            parsedExpression = "0 0 * * *";
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        cronExpression = parsedExpression;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            if (!cronParserService.TryNextOccurrenceDelta(cronExpression, out TimeSpan? deltaTime))
             {
-                if (!cronParserService.TryNextOccurrenceDelta(cronExpression, out TimeSpan? deltaTime))
-                {
-                    logger.LogWarning("Cron выражение '{expr}' инвалидно, или никогда не произойдет", cronExpression);
-                    return;
-                }
-                logger.LogInformation("Следующее исполнение Cron задачи, через {deltaTime}", deltaTime.Value);
-
-                await Task.Delay(deltaTime.Value, stoppingToken);
-                await using var scope = serviceProvider.CreateAsyncScope();
-                try
-                {
-                    T service = scope.ServiceProvider.GetRequiredService<T>();
-                    await service.DoTask(stoppingToken);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Ошибка в дочернем сервисе Cron задачи");
-                }
+                logger.LogWarning("Cron выражение '{expr}' инвалидно, или никогда не произойдет", cronExpression);
+                return;
             }
+            logger.LogInformation("Следующее исполнение Cron задачи, через {deltaTime}", deltaTime.Value);
 
-            if (stoppingToken.IsCancellationRequested)
+            await Task.Delay(deltaTime.Value, stoppingToken);
+            await using var scope = serviceProvider.CreateAsyncScope();
+            try
             {
-                logger.LogInformation("Задача {nameof} получила запрос на отмену", nameof(CronPeriodicTaskService<T>));
+                T service = scope.ServiceProvider.GetRequiredService<T>();
+                await service.DoTask(stoppingToken);
             }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Ошибка в дочернем сервисе Cron задачи");
+            }
+        }
+
+        if (stoppingToken.IsCancellationRequested)
+        {
+            logger.LogInformation("Задача {nameof} получила запрос на отмену", nameof(CronPeriodicTaskService<T>));
         }
     }
 }

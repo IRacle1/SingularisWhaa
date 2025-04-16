@@ -17,6 +17,7 @@ public class DocumentConfig : ICategoryConfig
         targetDocument = document;
     }
 
+    /// <inheritdoc/>
     public bool TryGet<T>(string propertyName, [NotNullWhen(true)] out T? value)
     {
         if (!targetDocument!.RootElement.TryGetProperty(propertyName, out JsonElement property))
@@ -29,6 +30,7 @@ public class DocumentConfig : ICategoryConfig
         return true;
     }
 
+    /// <inheritdoc/>
     public T? Get<T>(string propertyName)
     {
         TryGet(propertyName, out T? value);

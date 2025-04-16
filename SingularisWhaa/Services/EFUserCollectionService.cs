@@ -5,42 +5,45 @@ using SingularisWhaa.Models;
 using SingularisWhaa.Models.User;
 using SingularisWhaa.Services.Abstractions;
 
-namespace SingularisWhaa.Services
+namespace SingularisWhaa.Services;
+
+/// <inheritdoc/>
+public class EFUserCollectionService : IUserCollectionService
 {
-    public class EFUserCollectionService : IUserCollectionService
+    private readonly ApplicationContext context;
+
+    public EFUserCollectionService(ApplicationContext context)
     {
-        private readonly ApplicationContext context;
+        this.context = context;
+    }
 
-        public EFUserCollectionService(ApplicationContext context)
+    /// <inheritdoc/>
+    public async Task<UserDatabase?> Add(UserDto user)
+    {
+        UserDatabase userDatabase = new UserDatabase()
         {
-            this.context = context;
-        }
+            Name = user.Name!,
+            Email = user.Email!,
+            TimestampUtc = DateTimeOffset.UtcNow,
+            Age = user.Age,
+        };
 
-        public async Task<UserDatabase?> Add(UserDto user)
-        {
-            UserDatabase userDatabase = new UserDatabase()
-            {
-                Name = user.Name!,
-                Email = user.Email!,
-                TimestampUtc = DateTimeOffset.UtcNow,
-                Age = user.Age,
-            };
+        await context.Users.AddAsync(userDatabase);
+        await context.SaveChangesAsync();
 
-            await context.Users.AddAsync(userDatabase);
-            await context.SaveChangesAsync();
+        return userDatabase;
+    }
 
-            return userDatabase;
-        }
+    /// <inheritdoc/>
+    public async Task<bool> CheckEmailUnique(string email)
+    {
+        return await context.Users.AllAsync(u => 
+            !string.Equals(u.Email, email, StringComparison.InvariantCultureIgnoreCase));
+    }
 
-        public async Task<bool> CheckEmailUnique(string email)
-        {
-            return await context.Users.AllAsync(u => 
-                !string.Equals(u.Email, email, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        public async Task<IReadOnlyCollection<UserDatabase>> GetAll()
-        {
-            return await context.Users.AsNoTracking().ToListAsync();
-        }
+    /// <inheritdoc/>
+    public async Task<IReadOnlyCollection<UserDatabase>> GetAll()
+    {
+        return await context.Users.AsNoTracking().ToListAsync();
     }
 }
