@@ -10,7 +10,7 @@ public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T
     private readonly ICronParserService cronParserService;
     private readonly string cronExpression;
 
-    private string ConfigName => $"CronTask_{typeof(T).Name}";
+    private string TaskName => $"CronTask_{typeof(T).Name}";
 
     public CronPeriodicTaskService(ILogger<CronPeriodicTaskService<T>> logger, IServiceProvider serviceProvider, IConfigManagerService configManager, ICronParserService cronParserService)
     {
@@ -18,11 +18,11 @@ public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T
         this.serviceProvider = serviceProvider;
         this.cronParserService = cronParserService;
 
-        ICategoryConfig config = configManager.GetConfig(ConfigName);
+        ICategoryConfig config = configManager.GetConfig(TaskName);
 
         if (!config.TryGet("CronExpression", out string? parsedExpression))
         {
-            logger.LogWarning("Cron выражение (Поле 'CronExpression') в конфиге '{configname}' не задано, значение по умолчанию - раз в день.", ConfigName);
+            logger.LogWarning("Cron выражение (Поле 'CronExpression') в конфиге '{configname}' не задано, значение по умолчанию - раз в день.", TaskName);
             parsedExpression = "0 0 * * *";
         }
 
@@ -55,7 +55,7 @@ public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T
 
         if (stoppingToken.IsCancellationRequested)
         {
-            logger.LogInformation("Задача {nameof} получила запрос на отмену", nameof(CronPeriodicTaskService<T>));
+            logger.LogInformation("Задача '{taskName}' получила запрос на отмену", TaskName);
         }
     }
 }
