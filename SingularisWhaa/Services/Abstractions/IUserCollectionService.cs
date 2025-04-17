@@ -23,7 +23,7 @@ public interface IUserCollectionService
     /// </summary>
     /// <param name="user">Объект <see cref="UserDto"/> пользователя.</param>
     /// <returns><see cref="Task"/> отображающая задачу, и возвращающая объект <see cref="UserDatabase"/> созданного пользователя.</returns>
-    Task<UserDatabase?> Add(UserDto user);
+    Task<UserDatabase> Add(UserDto user);
 
     /// <summary>
     /// Возвращает всех существующих пользователей. 

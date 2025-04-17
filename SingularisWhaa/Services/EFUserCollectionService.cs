@@ -18,7 +18,7 @@ public class EFUserCollectionService : IUserCollectionService
     }
 
     /// <inheritdoc/>
-    public async Task<UserDatabase?> Add(UserDto user)
+    public async Task<UserDatabase> Add(UserDto user)
     {
         UserDatabase userDatabase = new UserDatabase()
         {

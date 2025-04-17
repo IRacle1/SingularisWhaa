@@ -40,13 +40,7 @@ public class UserController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        UserDatabase? createdUser = await userCollection.Add(userDto);
-
-        if (createdUser is null)
-        {
-            logger.LogError("Пользователь ()");
-            return Problem();
-        }
+        UserDatabase createdUser = await userCollection.Add(userDto);
 
         await emailService.SendEmail(createdUser, "welcome.liquid");
 
