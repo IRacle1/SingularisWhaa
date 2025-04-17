@@ -1,4 +1,4 @@
-using FluentValidation;
+п»їusing FluentValidation;
 using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Mvc;
@@ -36,13 +36,13 @@ public class UserController : ControllerBase
 
         if (!await userCollection.CheckEmailUnique(userDto.Email!))
         {
-            ModelState.AddModelError("Email", "Дубликат email'а!");
+            ModelState.AddModelError("Email", "Р”СѓР±Р»РёРєР°С‚ email'Р°!");
             return ValidationProblem(ModelState);
         }
 
         UserDatabase createdUser = await userCollection.Add(userDto);
 
-        logger.LogInformation("Добавлен пользователь '{username}' ({email})", createdUser.Name, createdUser.Email);
+        logger.LogInformation("Р”РѕР±Р°РІР»РµРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ '{username}' ({email})", createdUser.Name, createdUser.Email);
 
         await emailService.SendEmail(createdUser, "welcome");
 
