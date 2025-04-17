@@ -42,7 +42,9 @@ public class UserController : ControllerBase
 
         UserDatabase createdUser = await userCollection.Add(userDto);
 
-        await emailService.SendEmail(createdUser, "welcome.liquid");
+        logger.LogInformation("Добавлен пользователь '{username}' ({email})", createdUser.Name, createdUser.Email);
+
+        await emailService.SendEmail(createdUser, "welcome");
 
         return Created();
     }

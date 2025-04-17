@@ -36,9 +36,13 @@ public class PeriodicEmailSender : IPeriodicTask
         if (templateName == null)
             return;
 
+        logger.LogInformation(" - Начало периодической отправки...");
+
         foreach (UserDatabase user in await userCollection.GetAll())
         {
             await emailService.SendEmail(user, templateName);
         }
+
+        logger.LogInformation(" - Периодическая отправка завершена!");
     }
 }

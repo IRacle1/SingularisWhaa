@@ -64,7 +64,7 @@ public class FluentEmailService : IEmailService
     /// <inheritdoc/>
     public async Task SendEmail(UserDatabase user, string template)
     {
-        string path = Path.Combine(rootEmailsPath, template);
+        string path = Path.Combine(rootEmailsPath, template + ".liquid");
 
         if (!File.Exists(path))
         {

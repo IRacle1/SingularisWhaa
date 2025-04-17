@@ -1,3 +1,5 @@
 {
-    "PeriodicTemplateName": "info.liquid"
+    "PeriodicTemplateName": "info",
+    "SenderEmail": "tun@tun.tun",
+    "SenderName": "saur"
 }
