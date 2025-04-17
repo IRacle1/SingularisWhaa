@@ -1,0 +1,21 @@
+services:
+  main-app-sing:
+    image: smthg
+    hostname: main-app-sing-host
+    stdin_open: true
+    build:
+      args:
+        - APP_UID=1000
+    environment:
+      LANG: ru_RU.UTF-8
+      LC_ALL: ru_RU.UTF-8
+      TZ: Europe/Moscow
+      ASPNETCORE_URLS: http://+:80
+      App_ConfigPath: /Configs
+      #ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - 80:80
+    tty: true
+    container_name: main-app-sing
+    volumes:
+      - ~/Some/Path/Idk/Xd:/Configs:rw
