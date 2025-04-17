@@ -1,4 +1,5 @@
 ﻿using SingularisWhaa.Services.Abstractions;
+using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services;
 
@@ -17,7 +18,7 @@ public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T
         this.serviceProvider = serviceProvider;
         this.cronParserService = cronParserService;
 
-        var config = configManager.GetConfig(ConfigName);
+        ICategoryConfig config = configManager.GetConfig(ConfigName);
 
         if (!config.TryGet("CronExpression", out string? parsedExpression))
         {
@@ -40,7 +41,7 @@ public class CronPeriodicTaskService<T> : BackgroundService, IDisposable where T
             logger.LogInformation("Следующее исполнение Cron задачи, через {deltaTime}", deltaTime.Value);
 
             await Task.Delay(deltaTime.Value, stoppingToken);
-            await using var scope = serviceProvider.CreateAsyncScope();
+            await using AsyncServiceScope scope = serviceProvider.CreateAsyncScope();
             try
             {
                 T service = scope.ServiceProvider.GetRequiredService<T>();

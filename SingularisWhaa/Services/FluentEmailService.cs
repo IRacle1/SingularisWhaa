@@ -4,9 +4,9 @@ using FluentEmail.Liquid;
 
 using Microsoft.Extensions.Options;
 
-using SingularisWhaa.Models.Abstractions;
 using SingularisWhaa.Models.User;
 using SingularisWhaa.Services.Abstractions;
+using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services;
 
@@ -75,7 +75,7 @@ public class FluentEmailService : IEmailService
 
         string templateConent = await File.ReadAllTextAsync(path);
 
-        var response = await Email
+        FluentEmail.Core.Models.SendResponse response = await Email
             .From(senderEmail, senderName)
             .To(user.Email)
             .Subject("Singularis🐟")

@@ -1,6 +1,7 @@
 ﻿
 using SingularisWhaa.Models.User;
 using SingularisWhaa.Services.Abstractions;
+using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services;
 
@@ -18,7 +19,7 @@ public class PeriodicEmailSender : IPeriodicTask
         this.logger = logger;
         this.emailService = emailService;
         this.userCollection = userCollection;
-        var config = configManager.GetConfig("EmailConfig");
+        ICategoryConfig config = configManager.GetConfig("EmailConfig");
 
         if (!config.TryGet("PeriodicTemplateName", out string? rawTemplateName))
         {

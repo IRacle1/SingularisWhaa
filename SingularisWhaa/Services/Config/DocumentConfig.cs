@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
-using SingularisWhaa.Models.Abstractions;
-using SingularisWhaa.Services;
+using SingularisWhaa.Services.Abstractions.Config;
 
-namespace SingularisWhaa.Models.Config;
+namespace SingularisWhaa.Services.Config;
 
 public class DocumentConfig : ICategoryConfig
 {

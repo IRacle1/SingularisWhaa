@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace SingularisWhaa.Models.Abstractions;
+namespace SingularisWhaa.Services.Abstractions.Config;
 
+/// <summary>
+/// Конфиг категории, взаимодействующий с <see cref="IConfigManagerService"/>
+/// </summary>
 public interface ICategoryConfig
 {
     /// <summary>

@@ -14,7 +14,7 @@ public class CronosCronParserService : ICronParserService
     /// <inheritdoc/>
     public DateTimeOffset? NextOccurrence(string cronExpr, bool localTime)
     {
-        if (!cronExpressionsCache.TryGetValue(cronExpr, out var expr))
+        if (!cronExpressionsCache.TryGetValue(cronExpr, out CronExpression? expr))
         {
             expr = CronExpression.Parse(cronExpr);
             cronExpressionsCache.Add(cronExpr, expr);

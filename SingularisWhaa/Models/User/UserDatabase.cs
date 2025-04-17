@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace SingularisWhaa.Models.User;
 
 public class UserDatabase

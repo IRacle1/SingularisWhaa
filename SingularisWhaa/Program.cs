@@ -4,6 +4,8 @@ using SingularisWhaa.Models;
 using SingularisWhaa.Models.User;
 using SingularisWhaa.Services;
 using SingularisWhaa.Services.Abstractions;
+using SingularisWhaa.Services.Abstractions.Config;
+using SingularisWhaa.Services.Config;
 
 namespace SingularisWhaa;
 
@@ -11,7 +13,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         builder.Configuration.AddEnvironmentVariables();
 
@@ -23,7 +25,7 @@ public class Program
         builder.Services.AddScoped<IValidator<UserDto>, UserValidator>();
 
         builder.Services.AddScoped<IUserCollectionService, EFUserCollectionService>();
-        
+
         builder.Services.AddSingleton<ICronParserService, CronosCronParserService>();
 
         builder.Services.AddSingleton<IEmailService, FluentEmailService>();
@@ -31,7 +33,7 @@ public class Program
         builder.Services.AddTransient<PeriodicEmailSender>();
         builder.Services.AddHostedService<CronPeriodicTaskService<PeriodicEmailSender>>();
 
-        var app = builder.Build();
+        WebApplication app = builder.Build();
 
         if (!app.Environment.IsDevelopment())
         {

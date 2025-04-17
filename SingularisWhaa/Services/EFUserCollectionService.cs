@@ -37,7 +37,7 @@ public class EFUserCollectionService : IUserCollectionService
     /// <inheritdoc/>
     public async Task<bool> CheckEmailUnique(string email)
     {
-        return await context.Users.AllAsync(u => 
+        return await context.Users.AllAsync(u =>
             !string.Equals(u.Email, email, StringComparison.InvariantCultureIgnoreCase));
     }
 

@@ -1,13 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Contracts;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using SingularisWhaa.Models.Abstractions;
-using SingularisWhaa.Models.Config;
-using SingularisWhaa.Services.Abstractions;
+using SingularisWhaa.Services.Abstractions.Config;
 
-namespace SingularisWhaa.Services;
+namespace SingularisWhaa.Services.Config;
 
 /// <inheritdoc/>
 public class JsonConfigManagerService : IConfigManagerService

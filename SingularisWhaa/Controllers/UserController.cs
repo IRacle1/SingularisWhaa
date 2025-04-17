@@ -2,7 +2,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using SingularisWhaa.Models.User;
 using SingularisWhaa.Services.Abstractions;
@@ -27,7 +26,7 @@ public class UserController : ControllerBase
     [HttpPost("")]
     public async Task<IActionResult> AddUser([FromBody] UserDto userDto, [FromServices] IEmailService emailService)
     {
-        var validationResult = await userValidator.ValidateAsync(userDto);
+        FluentValidation.Results.ValidationResult validationResult = await userValidator.ValidateAsync(userDto);
         if (!validationResult.IsValid)
         {
             validationResult.AddToModelState(ModelState);
@@ -41,7 +40,7 @@ public class UserController : ControllerBase
             return ValidationProblem(ModelState);
         }
 
-        var createdUser = await userCollection.Add(userDto);
+        UserDatabase? createdUser = await userCollection.Add(userDto);
 
         if (createdUser is null)
         {

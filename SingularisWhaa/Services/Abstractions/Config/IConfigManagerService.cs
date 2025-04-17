@@ -1,6 +1,4 @@
-﻿using SingularisWhaa.Models.Abstractions;
-
-namespace SingularisWhaa.Services.Abstractions;
+﻿namespace SingularisWhaa.Services.Abstractions.Config;
 
 /// <summary>
 /// Интерфейс менеджера конфигов, поддерживающий категории.
