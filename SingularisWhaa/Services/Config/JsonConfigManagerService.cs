@@ -5,7 +5,6 @@ using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services.Config;
 
-/// <inheritdoc/>
 public class JsonConfigManagerService : IConfigManagerService
 {
     private readonly ILogger<JsonConfigManagerService> logger;

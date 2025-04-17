@@ -10,7 +10,6 @@ using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services;
 
-/// <inheritdoc/>
 public class FluentEmailService : IEmailService
 {
     private readonly ILogger<FluentEmailService> logger;

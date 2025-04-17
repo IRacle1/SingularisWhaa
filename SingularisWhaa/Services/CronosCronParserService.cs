@@ -6,7 +6,6 @@ using SingularisWhaa.Services.Abstractions;
 
 namespace SingularisWhaa.Services;
 
-/// <inheritdoc/>
 public class CronosCronParserService : ICronParserService
 {
     private readonly Dictionary<string, CronExpression> cronExpressionsCache = new();

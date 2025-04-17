@@ -7,7 +7,6 @@ using SingularisWhaa.Services.Abstractions;
 
 namespace SingularisWhaa.Services;
 
-/// <inheritdoc/>
 public class EFUserCollectionService : IUserCollectionService
 {
     private readonly ApplicationContext context;

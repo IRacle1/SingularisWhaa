@@ -5,7 +5,6 @@ using SingularisWhaa.Services.Abstractions.Config;
 
 namespace SingularisWhaa.Services;
 
-/// <inheritdoc/>
 public class PeriodicEmailSender : IPeriodicTask
 {
     private readonly ILogger<PeriodicEmailSender> logger;
